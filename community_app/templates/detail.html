@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        font-size: 18px;
+    }
+</style>
+
+<div style="margin:30px auto;border: 1px solid rgb(139, 134, 134); width:70%;">
+    <div style="display:flex; padding:35px 30px 20px 90px;font-weight: bold;">
+        <div style="width:45%;">{{community.title}}</div>
+        <div style="width:25%;text-align: center;">익명</div>
+        <div style="width:30%;">{{community.created_at}}</div>
+    </div>
+    <div style="padding:20px 30px 20px 90px;">{{community.content}}</div>
+    {% if community.image %}
+    <div style="margin-left:90px;margin-top: 20px;margin-bottom: 20px;">
+        <img src="{{community.image.url}}" alt="" width="250px" height="150px">
+    </div>
+    {% endif %}
+    <div style="padding-right:60px;margin-bottom: 50px;overflow: hidden;">
+        <a href="{% url 'index' %}"><button style="float:right">홈으로</button></a>
+    </div>        
+
+
+    <div style="padding:0 60px 0 90px;">
+        <h4>댓글 작성</h4>
+        {% for comment in community.comments.all %}
+        <div style="font-size:16px;padding:10px 30px 10px 50px;border-bottom: 1px solid rgb(206, 203, 203); display: flex;">
+            <div style="width:50%;">{{comment.댓글}}</div>
+            <div style="width:20%;text-align: center;">익명</div>
+            <div style="width:30%;">{{comment.created_at}}</div>
+        </div>
+        {% endfor %}
+        <form method="POST" action="{% url 'comment' community.id %}" style="width:fit-content;margin:25px auto 30px auto">
+            {% csrf_token %}
+            <input type="text" placeholder="댓글을 달아주세요." name="댓글" maxlength="50">
+            <button type="submit">입력</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
