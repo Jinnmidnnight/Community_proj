@@ -19,6 +19,7 @@ def new(request):
         community.title = request.POST['title']
         community.content = request.POST['content']
         community.image = request.FILES.get('image')
+        community.author = request.user
         community.save()
         return redirect('detail', community.id)
 
@@ -34,5 +35,6 @@ def comment(request, community_id):
     if form.is_valid():
         finished_form = form.save(commit=False)
         finished_form.post = get_object_or_404(Community, pk=community_id)
+        finished_form.author = request.user
         finished_form.save()
     return redirect('detail', community_id)
